@@ -1,10 +1,16 @@
 # PedLocation:
 A project to predict the next location of pedestrians.
 
-**Phase 1**: A simple function called **BaseModel** gets Cartesian coordinates of origin and destination and proveds the next location of pedestrian after 0.1 second assuming a speed of 1.2 m/s for the pedestian. 
+**Phase 1**: A simple function called **ped_model** gets Cartesian coordinates of origin, as called _position_, and destination, speed and desired time intervals, as called _context_, and proveds the next location of pedestrian.
+Default Values: speed: 1.2 m/s, intervals: 0.1 sec, 
 Usage:
 ```python
-model = BaseModel()
-newX, newY = model.predict((x1,y1),(x2,y2))
+output = ped_model(context, position)
 ```
+in which:
+```python
+position = {'x': current X, 'y': current Y}
+context = {'destination': final position, 'time interval': t, 'speed m/s' : s}
+output = { 'x' : new X,
+           'y: new Y}
 
