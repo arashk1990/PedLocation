@@ -10,30 +10,41 @@ BasicModel.main()
 with open('Model_V0.pkl', 'rb') as f:
     model_V0 = pickle.load(f)
 
-# Load sample position and context dictionaries for testing purposes,
+# Load position and context from local text files and convert them to dictionaries,
 # needs to be replaced by !Important desired format
-position = {                                       #current position of the pedestrian
-    'x' : 0,
-    'y' : 10
-}
-context = {
-    'destination' : (10,10),                      #final destination
-    'time interval' : 0.1,                        # time intervals between frames
-    'speed m/s' : 1.2                             #default speed of pedestrian in m/s
-}
+context = {}
+with open("Context") as f:
+    for line in f:
+        (key, val) = line.split(' : ')
+        context[key] = val[:-1]
+Xn, Yn = map(float, context['Destination'].replace(')', '').replace('(', '').split(','))
+context['Destination'] = np.array((Xn, Yn))
 
-def ped_model(context,position):
-    org = (position['x'], position['y'])
-    dest = context['destination']
-    t = context['time interval']
-    s = context['speed m/s']
-    model = model_V0(t,s)
-    new_x, new_y = model.predict(org,dest)
-    output = {
-        'x': new_x,
-        'y': new_y}
+Positions = {}
+with open("Position") as f:
+    for line in f:
+        (key, val) = line.split(' : ')
+        x, y = map(float, val.replace(')', '').replace('(', '').split(','))
+        Positions[key] = (x, y)
+org = Positions[list(Positions.keys())[0]]       # calling the first position in the list as origin
+pos = Positions[list(Positions.keys())[-1]]      # calling the last position in the list as current location
+
+
+def ped_model(context, position):
+    dest = context['Destination']
+    t = float(context['Time interval (s)'])
+    s = float(context['Speed (m/s)'])
+    model = model_V0(t, s)
+    newPos = np.array(model.predict(position, dest))
+    if np.linalg.norm(newPos - org) < np.linalg.norm(dest - org):     #check if the user has reached the destination
+        output = newPos
+    else:
+        output = dest
+
     return output
 
-#some printing of the results to test the docker, to be removed later
-print('The next location of the pedestrian is:')
-print([ped_model(context,position)[i] for i in ['x','y']])
+
+output = ped_model(context, pos)
+
+with open("Position", "a") as f:
+    f.write("Position {} : ({:.2f},{:.2f})\n".format(len(Positions), output[0], output[1]))
