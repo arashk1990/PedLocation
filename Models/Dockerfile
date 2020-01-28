@@ -4,3 +4,4 @@ ADD BasicModel.py /
 RUN pip install numpy
 RUN pip install pandas
 CMD ["python", "./PedModel.py"]
+

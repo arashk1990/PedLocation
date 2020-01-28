@@ -13,7 +13,7 @@ with open('Model_V0.pkl', 'rb') as f:
 # Load position and context from local text files and convert them to dictionaries,
 # needs to be replaced by !Important desired format
 context = {}
-with open("Context") as f:
+with open("/logs/Context") as f:
     for line in f:
         (key, val) = line.split(' : ')
         context[key] = val[:-1]
@@ -21,7 +21,7 @@ Xn, Yn = map(float, context['Destination'].replace(')', '').replace('(', '').spl
 context['Destination'] = np.array((Xn, Yn))
 
 Positions = {}
-with open("Position") as f:
+with open("/logs/Position") as f:
     for line in f:
         (key, val) = line.split(' : ')
         x, y = map(float, val.replace(')', '').replace('(', '').split(','))
@@ -46,5 +46,5 @@ def ped_model(context, position):
 
 output = ped_model(context, pos)
 
-with open("Position", "a") as f:
+with open("/logs/Position", "a") as f:
     f.write("Position {} : ({:.2f},{:.2f})\n".format(len(Positions), output[0], output[1]))
