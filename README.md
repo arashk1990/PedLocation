@@ -5,7 +5,7 @@ A project to predict the next location of pedestrians.
 Context and Position text files are accessable in /logs folder
 Usage in docker:
 ```python
-To run PedModel.py in the docker, run the following commands in terminal/command prompt \\
+To run PedModel.py in the docker, run the following commands in terminal/command prompt
 in the directory of the docker file: ~/PedLocation/Models
 sudo docker build -t python-barcode .    #(“.” is required.)
 sudo docker run -ti -v $(pwd)/logs:/logs python-barcode
