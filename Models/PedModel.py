@@ -1,10 +1,15 @@
+######################################
+#  Date Created: January 28, 2020    #
+#  Date Modified: Janaury 29, 2020   #
+#  Ownership: LiTrans                #
+#  Creator: Arash Kalatian           #
+######################################
 # A basic model to predict next location of a pedestrian
 import numpy as np
 import pandas as pd
 import math
 import pickle
 import BasicModel
-
 
 BasicModel.main()
 with open('Model_V0.pkl', 'rb') as f:
@@ -47,4 +52,4 @@ def ped_model(context, position):
 output = ped_model(context, pos)
 
 with open("/logs/Position", "a") as f:
-    f.write("Position {} : ({:.2f},{:.2f})\n".format(len(Positions), output[0], output[1]))
+    f.write("\nPosition {} : ({:.2f},{:.2f})".format(len(Positions), output[0], output[1]))
